@@ -87,6 +87,8 @@ class HTML2Text(html.parser.HTMLParser):
         self.open_quote = config.OPEN_QUOTE  # covered in cli
         self.close_quote = config.CLOSE_QUOTE  # covered in cli
 
+        self.should_escape_md = False # Navina added
+
         if out is None:
             self.out = self.outtextf
         else:
@@ -884,7 +886,7 @@ class HTML2Text(html.parser.HTMLParser):
                 self.maybe_automatic_link = None
                 self.empty_link = False
 
-        if not self.code and not self.pre and not entity_char:
+        if (not self.code and not self.pre and not entity_char) and (self.should_escape_md):
             data = escape_md_section(data, snob=self.escape_snob)
         self.preceding_data = data
         self.o(data, puredata=True)
